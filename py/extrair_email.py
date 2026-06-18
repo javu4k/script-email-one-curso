@@ -1,13 +1,17 @@
 import re
 import pandas as pd
+import os
 
 from docx import Document #Importa a biblioteca para manipular o docs
-caminho_arquivo = "documentos_word/IF_AC_MS_AP.docx" #cria variável do caminho do arquivo
-documento = Document(caminho_arquivo) #Cria um objeto documento a partir do caminho do arquivo
+arquivos = os.listdir("documentos_word/") #Lista os arquivos dentro da pasta documentos_word
+print(arquivos)
 
 texto_completo = ""
-for paragrafo in documento.paragraphs:
-    texto_completo += paragrafo.text + "\n"
+
+for arquivo in arquivos:
+    documento = Document("documentos_word/" + arquivo) #Cria um objeto documento a partir do caminho do arquivo
+    for paragrafo in documento.paragraphs:
+        texto_completo += paragrafo.text + "\n" 
 
 #print(texto_completo)
 padrao_email = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
@@ -15,8 +19,9 @@ padrao_email = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
 emails_encontrados = re.findall(padrao_email, texto_completo)
 #print(emails_encontrados)
 
+#pra eu saber quantos emails unicos foram encontrados
 emails_unicos = set(emails_encontrados)
-#print(len(emails_unicos))
+print(len(emails_unicos))
 
 dominios_estados = {
     "ifap.edu.br":"AP",
