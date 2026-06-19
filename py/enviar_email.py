@@ -32,12 +32,18 @@ for indice, linha in tabela.iterrows():
     corpo = "email de testeee, oremos, omnia in bonum"
     msg.attach(MIMEText(corpo,'plain'))
 
-    servidor.sendmail(EMAIL, linha['email'], msg.as_string())
+    try:
+        servidor.sendmail(EMAIL, linha['email'], msg.as_string())
 
-    with open("log.txt", "a") as arquivo_log:
-            arquivo_log.write(linha["email"] + "\n")
+        with open("log.txt", "a") as arquivo_log:
+                arquivo_log.write(linha["email"] + "\n")
+        print(f"Email enviado para: {linha['email']}")
 
-    print(f"Email enviado para: {linha['email']}")
+    except Exception as e:
+        print(f"Erro ao enviar para {linha['email']}: {e}")
+        with open("planilhas/erros.csv", "a") as arquivo_erros:
+            arquivo_erros.write(f"{linha['email']};{str(e)}\n")
+
     contador +=1
 
     if contador %480 ==0:
